@@ -73,30 +73,141 @@ const player = (name, marker) => {
 const gameplay = (() => {
 
 
-    //assign player markers
-    const p1 = player("Bob","X");
-    const p2 = player("Carl", "O")
 
-
-    let markerTurn = p1.marker; //player 1 starts the game
+    let markerTurn;
     let turnCount = 0;
     let gameStatusDisplay = document.getElementById('gameStatus');
-    let resetButton = document.getElementById('reset');
+    const resetButton = document.getElementById('reset');
+    const playAgainButton = document.getElementById('playAgain');
+    const modal = document.getElementById("setupModal");
+    const modalButton = document.getElementById('modalButton');
+    const p1Check = document.getElementById("p1Check");
+    const p2Check = document.getElementById("p2Check");
+    const p1XSelect = document.getElementById("p1X");
+    const p1OSelect = document.getElementById("p1O");
+    const p2XSelect = document.getElementById("p2X");
+    const p2OSelect = document.getElementById("p2O");
+    const p1NameDisplay = document.getElementById("p1NameDisplay");
+    const p1MarkerDisplay = document.getElementById("p1MarkerDisplay");
+    const p2NameDisplay = document.getElementById("p2NameDisplay");
+    const p2MarkerDisplay = document.getElementById("p2MarkerDisplay");
+    let errorMessage = document.getElementById("formError");
+
+
+
     let gameStatus;
+    let p1Name;
+    let p2Name;
+    let p1;
+    let p2;
 
+    //Default settings, p1 is X and p2 is O
+    let p1MarkerSelection = "X";
+    let p2MarkerSelection = "O";
 
+    
+    //request user input for game settings
+    setupGame();
+
+    //initilize game for the first time
     resetButton.addEventListener('click', function() {resetGame()});
-
+    playAgainButton.addEventListener('click', function() {playAgain()});
+    p1Check.addEventListener('click', function() {toggleSelectSwitches()});
+    p2Check.addEventListener('click', function() {toggleSelectSwitches()});
     gameboard.initBoard();
-    initGame();
+
+
+    //Set game settings in a modal popup
+    function setupGame() {
+        //open modal
+        modal.style.display = "block";
+        errorMessage.innerText = "";
+
+
+        //reset checkboxes to match current marker selections
+        if (p1MarkerSelection == "X") {
+            p1Check.checked = false;
+            p2Check.checked = true;
+        }
+        else {
+            p1Check.checked = true;
+            p2Check.checked = false;
+        }
+
+        //close modal when submit button clicked
+        modalButton.addEventListener('click', function() {readForm();});
+    }
+
+    //read Username Inputs
+    function readForm () {
+        let form = document.getElementById("gameForm");
+
+
+        p1Name = form.elements["p1Name"].value;
+        p2Name = form.elements["p2Name"].value;
+
+        if (p1Name == "" || p2Name == "") {
+            errorMessage.innerText = "Please fill in all fields!"
+        }
+        else {
+            form.reset();
+            //Update display with user inputs
+            errorMessage.innerText = "";
+            p1NameDisplay.innerText = p1Name;
+            p2NameDisplay.innerText = p2Name;
+            p1MarkerDisplay.innerText = p1MarkerSelection;
+            p2MarkerDisplay.innerText = p2MarkerSelection;
+            modal.style.display = "none";
+            //assign players
+            p1 = player(p1Name,p1MarkerSelection);
+            p2 = player(p2Name, p2MarkerSelection);
+            initGame();
+        }
+
+    }
+
+    //allow users to select which markers, will automatically adjust the other players marker
+    function toggleSelectSwitches() {
+        if (p1MarkerSelection == "X") {
+            p1MarkerSelection = "O";
+            p2MarkerSelection = "X";
+            p1Check.checked = true;
+            p2Check.checked = false;
+            p1XSelect.style.color = "#000";
+            p1OSelect.style.color = "#2196F3";
+            p2XSelect.style.color = "#2196F3";
+            p2OSelect.style.color = "#000";
+        }
+        else {
+            p1MarkerSelection = "X";
+            p2MarkerSelection = "O";
+            p1Check.checked = false;
+            p2Check.checked = true;
+            p1XSelect.style.color = "#2196F3";
+            p1OSelect.style.color = "#000";
+            p2XSelect.style.color = "#000";
+            p2OSelect.style.color = "#2196F3";
+
+        }
+
+    }
 
 
     //start game
     function initGame() {
+
+        //Update screen with user selections
+        p1NameDisplay.innerText = p1.name;
+        p2NameDisplay.innerText = p2.name;
+        p1MarkerDisplay.innerText = p1.marker;
+        p2MarkerDisplay.innerText = p2.marker;
+
+        markerTurn = p1.marker; //player 1 starts the game
+        gameStatusDisplay.innerText = `${p1.name}'s turn`;
+
         gameStatus = 'active';
         playerTurn();
     }
-
 
     //listen for player clicks on grid positions
     function playerTurn() {
@@ -138,11 +249,22 @@ const gameplay = (() => {
 
         if (markerTurn === "X") {
             markerTurn = "O";
-            gameStatusDisplay.innerText = "O's turn";
+            if (p1.marker === "O") {
+                gameStatusDisplay.innerText = `${p1.name}'s turn`;
+            }
+            else {
+                gameStatusDisplay.innerText = `${p2.name}'s turn`;
+            }
         }
         else {
             markerTurn = "X";
-            gameStatusDisplay.innerText = "X's turn";
+            if (p1.marker === "X") {
+                gameStatusDisplay.innerText = `${p1.name}'s turn`;
+            }
+            else {
+                gameStatusDisplay.innerText = `${p2.name}'s turn`;
+            }
+
         }
     }
 
@@ -190,7 +312,13 @@ const gameplay = (() => {
     //End game procedure
     function gameOver(result, marker) {
         if (result === 'win') {
-            gameStatusDisplay.innerText = `${marker} wins!`;
+            if (p1.marker === marker) {
+                gameStatusDisplay.innerText = `${p1.name} wins!`;
+            }
+            else {
+                gameStatusDisplay.innerText = `${p2.name} wins!`;
+
+            }
         }
         else if (result === 'tie') {
             gameStatusDisplay.innerText = `Draw!`;
@@ -201,14 +329,25 @@ const gameplay = (() => {
 
     }
 
+    //Reset game but keep markers and usernames
+    function playAgain() {
+        turnCount = 0;
+        gameStatus = 'active';
+        gameStatusDisplay.innerText = "Let's Play!";
+        gameboard.resetBoard();
+        initGame();
+    }
+
     //reset Game parameters
     function resetGame() {
         turnCount = 0;
         gameStatus = 'active';
-        gameStatusDisplay.innerText = "";
+        gameStatusDisplay.innerText = "Let's Play!";
         gameboard.resetBoard();
-        initGame();
+        setupGame();
     }
+
+
 
 
 })();

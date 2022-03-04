@@ -8,8 +8,59 @@
 
     <link rel="stylesheet" href="style.css">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet">
+
 </head>
 <body>
+
+    <div class="modal" id="setupModal">
+        <div class="modal-content">
+            <h1>Tic Tac Toe</h1>
+            <div class="form">
+                <form id="gameForm">
+                    <div class = "playerContainer">
+                        <div class="col">
+                            <label for="p1Name">Player One Name:</label>
+                            <p>Player One Marker:</p>
+                        </div>
+                        <div class="col">
+                            <input type="text" id="p1Name" name="p1Name" maxlength="15">
+                            <div class="sliderCon">
+                                <span class="markerSelect" id="p1X">X</span>
+                                <label class="switch" id="p1Switch">
+                                <input type="checkbox" id="p1Check">
+                                <span class="slider round"></span>
+                                </label>
+                                <span class="markerSelect" id="p1O">O</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="playerContainer">
+                        <div class="col">
+                            <label for="p2Name">Player Two Name:</label>
+                            <p>Player Two Marker:</p>
+                        </div>
+                        <div class="col">
+                            <input type="text" id="p2Name" name="p2Name" maxlength="15">
+                            <div class="sliderCon">
+                                <span class="markerSelect" id="p2X">X</span>
+                                <label class="switch" id="p2Switch">
+                                <input type="checkbox" id="p2Check" checked="checked">
+                                <span class="slider round"></span>
+                                </label>
+                                <span class="markerSelect" id="p2O">O</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <button id="modalButton">Play!</button><span id="formError"></span>
+        </div>
+\    </div>
 
     <div class="header">
         <h1>Tic Tac Toe game</h1>
@@ -17,12 +68,12 @@
     <div class="main">
         <div class="gameSetting">
             <div class="playerOne">
-                <p>Player One: <span id="p1Name"></span></p>
-                <p>Marker: <span id="p1Score"></span></p>
+                <p>Player One: <span id="p1NameDisplay"></span></p>
+                <p>Marker: <span id="p1MarkerDisplay"></span></p>
             </div>
             <div class="playerTwo">
-                <p>Player Two: <span id="p2Name"></span></p>
-                <p>Marker: <span id="p2Score"></span></p>
+                <p>Player Two: <span id="p2NameDisplay"></span></p>
+                <p>Marker: <span id="p2MarkerDisplay"></span></p>
             </div>
         </div>
         <div class="gameBoard">
@@ -36,8 +87,9 @@
             <div class="square" id="7"></div>
             <div class="square" id="8"></div>
         </div>
-        <div class="gameStatus" id="gameStatus"></div>
-        <div class="resetDiv"><button class="resetButton" id="reset">Reset</button></div>
+        <div class="gameStatus" id="gameStatus">Let's Play!</div>
+        <div class="resetDiv"><button class="playAgainButton" id="playAgain">Play Again</button><button class="resetButton" id="reset">Reset</button></div>
+
 
     </div>
 
