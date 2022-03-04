@@ -1,0 +1,43 @@
+
+body {
+    margin:0;
+    padding:0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.gameSetting {
+    display: flex;
+    justify-content: space-between;
+}
+
+.gameBoard {
+    display: grid;
+    grid-template: repeat(3, 100px) / repeat(3, 100px);
+    gap: 10px;
+}
+
+.square {
+    background-color: aqua;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+}
+
+.gameStatus {
+    margin: 25px;
+    display: flex;
+    justify-content: center;
+    background-color: yellow;
+    font-size: 24px;
+
+}
+
+.resetDiv {
+    display: flex;
+    justify-content: center;
+}
