@@ -64,7 +64,17 @@ const gameboard = (() => {
 //player module
 const player = (name, marker) => {
 
-    return {name, marker};
+    var _score=0;
+
+    function addPoint () {
+        _score++;
+    }
+
+    function readScore() {
+        return _score;
+    }
+
+    return {name, marker, addPoint, readScore};
 
 };
 
@@ -89,8 +99,10 @@ const gameplay = (() => {
     const p2OSelect = document.getElementById("p2O");
     const p1NameDisplay = document.getElementById("p1NameDisplay");
     const p1MarkerDisplay = document.getElementById("p1MarkerDisplay");
+    const p1ScoreDisplay = document.getElementById("p1ScoreDisplay");
     const p2NameDisplay = document.getElementById("p2NameDisplay");
     const p2MarkerDisplay = document.getElementById("p2MarkerDisplay");
+    const p2ScoreDisplay = document.getElementById("p2ScoreDisplay");
     let errorMessage = document.getElementById("formError");
 
 
@@ -314,9 +326,13 @@ const gameplay = (() => {
         if (result === 'win') {
             if (p1.marker === marker) {
                 gameStatusDisplay.innerText = `${p1.name} wins!`;
+                p1.addPoint();
+                p1ScoreDisplay.innerText = p1.readScore();
             }
             else {
                 gameStatusDisplay.innerText = `${p2.name} wins!`;
+                p2.addPoint();
+                p2ScoreDisplay.innerText = p2.readScore();
 
             }
         }
@@ -343,6 +359,8 @@ const gameplay = (() => {
         turnCount = 0;
         gameStatus = 'active';
         gameStatusDisplay.innerText = "Let's Play!";
+        p1ScoreDisplay.innerText = "";
+        p2ScoreDisplay.innerText = "";
         gameboard.resetBoard();
         setupGame();
     }
